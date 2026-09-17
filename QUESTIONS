@@ -1,0 +1,5 @@
+Create the EmployeeSales table with appropriate columns and data types, then insert at least 10 sample records.
+Find employees whose total sales amount is greater than ₹150,000.
+Rank employees based on their total sales and display the top 3 employees.
+Calculate monthly sales and compare each month’s sales with the previous month using LAG().
+Find the highest-selling product for each employee using a window function.
