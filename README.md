@@ -1,2 +1,1 @@
-# sql-business-case-solutions
-A collection of SQL business case studies covering table creation, data insertion, aggregation, filtering, joins, subqueries, CTEs, and window functions.
+This project contains practical SQL business case solutions using an Employee Sales dataset. It demonstrates table creation, data insertion, aggregation, HAVING, ranking, CTEs, LAG, window functions, and product-level analysis.
