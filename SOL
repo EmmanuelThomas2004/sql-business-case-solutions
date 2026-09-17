@@ -1,0 +1,57 @@
+SELECT *
+FROM (
+    SELECT EmployeeName,
+           EmployeeID,
+           SUM(Quantity * UnitPrice * (1 - Discount)) AS TotalSales,
+           RANK() OVER (
+               ORDER BY SUM(Quantity * UnitPrice * (1 - Discount)) DESC
+           ) AS SalesRank
+    FROM EmployeeSales
+    GROUP BY EmployeeName, EmployeeID
+) AS RankedSales
+WHERE SalesRank <= 3;
+
+WITH MonthlySales AS (
+    SELECT
+        MONTH(SaleDate) AS SaleMonth,
+        SUM(Quantity * UnitPrice * (1 - Discount)) AS TotalSales
+    FROM EmployeeSales
+    GROUP BY MONTH(SaleDate)
+),
+PreviousMonth AS (
+    SELECT
+        SaleMonth,
+        TotalSales,
+        LAG(TotalSales) OVER (ORDER BY SaleMonth) AS PreviousSales
+    FROM MonthlySales
+)
+SELECT
+    SaleMonth,
+    TotalSales,
+    PreviousSales,
+    (TotalSales - PreviousSales) / NULLIF(PreviousSales, 0) * 100 AS GrowthPercentage
+FROM PreviousMonth;
+
+SELECT ProductName,
+       SUM(Quantity) AS TotalQuantity,
+       SUM(Quantity * UnitPrice * (1 - Discount)) AS TotalSales
+FROM EmployeeSales
+GROUP BY ProductName
+ORDER BY TotalSales DESC;
+
+SELECT EmployeeName,
+       ProductName,
+       TotalSales
+FROM (
+    SELECT
+        EmployeeName,
+        ProductName,
+        SUM(Quantity * UnitPrice * (1 - Discount)) AS TotalSales,
+        ROW_NUMBER() OVER (
+            PARTITION BY EmployeeName
+            ORDER BY SUM(Quantity * UnitPrice * (1 - Discount)) DESC
+        ) AS rn
+    FROM EmployeeSales
+    GROUP BY EmployeeName, ProductName
+) AS EmployeeProductSales
+WHERE rn = 1;
