@@ -1,0 +1,28 @@
+CREATE TABLE EmployeeSales (
+    SaleID INT PRIMARY KEY,
+    EmployeeID INT,
+    EmployeeName VARCHAR(100),
+    SaleDate DATE,
+    ProductName VARCHAR(100),
+    Quantity INT,
+    UnitPrice DECIMAL(10,2),
+    Discount DECIMAL(5,2)
+);
+
+INSERT INTO EmployeeSales (SaleID, EmployeeID, EmployeeName, SaleDate, ProductName, Quantity, UnitPrice, Discount) VALUES
+(1, 101, 'John', '2026-01-05', 'Laptop', 5, 60000, 0.10),
+(2, 102, 'David', '2026-01-10', 'Monitor', 8, 15000, 0.05),
+(3, 103, 'Sarah', '2026-02-03', 'Keyboard', 20, 2500, 0.00),
+(4, 101, 'John', '2026-02-15', 'Mouse', 30, 1200, 0.05),
+(5, 104, 'Michael', '2026-03-08', 'Laptop', 7, 60000, 0.08),
+(6, 102, 'David', '2026-03-18', 'Monitor', 12, 15000, 0.10),
+(7, 103, 'Sarah', '2026-04-02', 'Laptop', 4, 60000, 0.05),
+(8, 104, 'Michael', '2026-04-20', 'Keyboard', 25, 2500, 0.00),
+(9, 101, 'John', '2026-05-11', 'Monitor', 10, 15000, 0.05),
+(10, 102, 'David', '2026-05-25', 'Laptop', 6, 60000, 0.10);
+
+SELECT EmployeeName,
+       SUM(Quantity * UnitPrice * (1 - Discount)) AS TotalSales
+FROM EmployeeSales
+GROUP BY EmployeeName
+HAVING SUM(Quantity * UnitPrice * (1 - Discount)) > 150000;
